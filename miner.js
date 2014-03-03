@@ -1,11 +1,21 @@
 var gl;
 
 $(function() {
+    var WIDTH = window.innerWidth,
+        HEIGHT = window.innerHeight;
+
+      // set some camera attributes
+      var FOV = 90,
+        ASPECT = WIDTH / HEIGHT,
+        NEAR = 0.1,
+        FAR = 10000,
+        ANGLE = 45;
+        
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    var camera = new THREE.PerspectiveCamera( FOV, ASPECT, NEAR, FAR );
     
     var renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( WIDTH, HEIGHT );
     document.body.appendChild( renderer.domElement );
     
     var geometry = new THREE.Geometry();
@@ -32,8 +42,9 @@ $(function() {
     scene.add( ship );
     
     camera.position.x = 0;
-    camera.position.y = 2;
+    camera.position.y = 8;
     camera.position.z = 5;
+    camera.lookAt(ship.position);
     
     var render = function () {
 		requestAnimationFrame(render);
