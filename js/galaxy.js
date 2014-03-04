@@ -1,4 +1,4 @@
-define(['three', 'ship'], function(three, Ship) {
+define(['three', 'ship', 'controls'], function(three, Ship, Controls) {
     function Galaxy() {
         var WIDTH = window.innerWidth,
         HEIGHT = window.innerHeight;
@@ -19,21 +19,18 @@ define(['three', 'ship'], function(three, Ship) {
         
         var ship = new Ship(scene);
         
-        camera.position.x = 0;
-        camera.position.y = 8;
-        camera.position.z = 5;
+        ship.mesh.position.z = -10;
         camera.lookAt(ship.mesh.position);
         
-        var ambientLight = new THREE.AmbientLight( 0x000044 );
-        scene.add(ambientLight);
+        var pointLight = new THREE.PointLight( 0xffffff, 1, 100 );
+        pointLight.position.set(5, 10, 0);
+        scene.add(pointLight);
         
-        var directionalLight = new THREE.DirectionalLight( 0xffffff );
-        directionalLight.position.set(1, 1, 1).normalize();
-        scene.add( directionalLight );
+        camera.lookAt(ship.mesh.position);
         
         var render = function () {
     		requestAnimationFrame(render);
-    
+
     		renderer.render(scene, camera);
     	};
     
