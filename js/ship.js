@@ -1,6 +1,9 @@
 define(['three'], function (three) {
     function Ship(scene) {
         this.scene = scene;
+        this.mass = 5e4;  // kgs
+        this.velocity = 0;
+        
         var geometry = new THREE.Geometry();
     
         // back face
