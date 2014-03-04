@@ -1,4 +1,4 @@
-define(['three', 'ship', 'controls'], function(three, Ship, Controls) {
+define(['three', 'ship', 'ship_controls'], function(three, Ship, ShipControls) {
     function Galaxy() {
         var WIDTH = window.innerWidth,
         HEIGHT = window.innerHeight;
@@ -12,6 +12,8 @@ define(['three', 'ship', 'controls'], function(three, Ship, Controls) {
             
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera( FOV, ASPECT, NEAR, FAR );
+        var controls = new Controls(camera);
+        scene.add(controls);
         
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize( WIDTH, HEIGHT );
@@ -30,7 +32,7 @@ define(['three', 'ship', 'controls'], function(three, Ship, Controls) {
         
         var render = function () {
     		requestAnimationFrame(render);
-
+            controls.update();
     		renderer.render(scene, camera);
     	};
     
