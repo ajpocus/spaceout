@@ -9,7 +9,7 @@ define(['three'], function (three) {
   	this.ship = ship;
   
   	this.domElement = document;
-  	this.speed = 1.0;
+  	this.speed = 10.0;
   	this.tmpQuaternion = new THREE.Quaternion();
   
   	this.mouseStatus = 0;
@@ -31,7 +31,7 @@ define(['three'], function (three) {
 			var halfHeight = container.size[ 1 ] / 2;
 
 			this.moveState.left   = - ( ( event.pageX - container.offset[ 0 ] ) - halfWidth  ) / halfWidth;
-			this.moveState.up =   ( ( event.pageY - container.offset[ 1 ] ) - halfHeight ) / halfHeight;
+			this.moveState.down =   ( ( event.pageY - container.offset[ 1 ] ) - halfHeight ) / halfHeight;
 
 			this.updateRotationVector();
       this.updateMovementVector();  
