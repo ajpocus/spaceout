@@ -21,29 +21,10 @@ define(['three', 'ship', 'ship_controls', 'asteroid'], function(three, Ship, Shi
     ship.mesh.position.z = -30;
     camera.lookAt(ship.mesh.position);
     
-    var asteroids = [];
-    var p = 0;
-    for (var i = 0; i > -300; i -= 5) {
-      for (var j = 0; j < 8; j++) {
-        var asteroid = new Asteroid(scene);
-        var minX = -(window.innerWidth / 2),
-            maxX = window.innerWidth / 2,
-            minY = -(window.innerHeight / 2),
-            maxY = window.innerHeight / 2,
-            minZ = -10,
-            maxZ = -1000;
-            
-        asteroid.mesh.position.x = Math.random() * (maxX - minX) + minX;
-        asteroid.mesh.position.y = Math.random() * (maxY - minY) + minY;
-        asteroid.mesh.position.z = i;
-        
-        asteroids[p] = asteroid;
-        p++;
-      }
-    }
+    Asteroid.generateField(scene);
     
     var directionalLight = new THREE.DirectionalLight( 0xffffff, 1.0 );
-    directionalLight.position.set(0, 1, 0).normalize();
+    directionalLight.position.set(0, 0, 0).normalize();
     scene.add(directionalLight);
     
     var pointLight = new THREE.PointLight( 0xffffff, 1, 100 );
@@ -60,9 +41,7 @@ define(['three', 'ship', 'ship_controls', 'asteroid'], function(three, Ship, Shi
       var delta = clock.getDelta();
       controls.update(delta);
       
-      for (var i = 0; i < asteroids.length; i++) {
-        asteroids[i].mesh.translateZ(1.0);
-      }
+      Asteroid.updateField(scene);
       
 		  renderer.render(scene, camera);
 	  };
