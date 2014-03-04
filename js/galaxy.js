@@ -1,4 +1,4 @@
-define(['three', 'ship', 'ship_controls', 'asteroid'], function(three, Ship, ShipControls, Asteroid) {
+define(['three', 'ship', 'ship_controls', 'asteroid', 'sun'], function(three, Ship, ShipControls, Asteroid, Sun) {
   function Galaxy() {
     var WIDTH = window.innerWidth,
     HEIGHT = window.innerHeight;
@@ -18,20 +18,21 @@ define(['three', 'ship', 'ship_controls', 'asteroid'], function(three, Ship, Shi
     document.body.appendChild( renderer.domElement );
     
     var ship = new Ship(scene);
-    ship.mesh.position.z = -30;
+    ship.mesh.position.z = 180;
     camera.lookAt(ship.mesh.position);
     
-    Asteroid.generateField(scene);
+    // Asteroid.generateField(scene);
+    var sun = new Sun(scene);
     
-    var directionalLight = new THREE.DirectionalLight( 0xffffff, 1.0 );
-    directionalLight.position.set(0, 0, 0).normalize();
-    scene.add(directionalLight);
+    var ambientLight = new THREE.AmbientLight( 0x404040 );
+    scene.add(ambientLight);
     
-    var pointLight = new THREE.PointLight( 0xffffff, 1, 100 );
-    pointLight.position.set(5, 10, 0);
+    var pointLight = new THREE.PointLight( 0xffffff, 1, 10000 );
+    pointLight.position = sun.mesh.position;
     scene.add(pointLight);
     
-    camera.lookAt(ship.mesh.position);
+    camera.position.z = 200;
+    camera.lookAt(sun.mesh.position);
     
     var controls = new ShipControls(camera, ship);
     
@@ -41,7 +42,7 @@ define(['three', 'ship', 'ship_controls', 'asteroid'], function(three, Ship, Shi
       var delta = clock.getDelta();
       controls.update(delta);
       
-      Asteroid.updateField(scene);
+      // Asteroid.updateField(scene);
       
 		  renderer.render(scene, camera);
 	  };
