@@ -16,6 +16,9 @@ define(['three'], function (three) {
 	  yawObject.position.y = 10;
 	  yawObject.add( pitchObject );
 
+    // set initial position at (0, 0, 200)
+    yawObject.translateZ(200);
+    
 	  var moveForward = false;
 	  var moveBackward = false;
 	  var moveLeft = false;
@@ -177,7 +180,7 @@ define(['three'], function (three) {
 		  }
 
 	  };
-
+	  
   };
   
   return THREE.PointerLockControls;
