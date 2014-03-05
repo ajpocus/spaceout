@@ -50,6 +50,11 @@ define(['three'], function (three) {
         pitchObject = controls.pitchObject,
         yawObject = controls.yawObject;
       
+      // gradually degrade the velocity of the ship
+      if (this.velocity > 0) {
+        this.velocity -= 0.005;
+      }
+      
       // this.mesh.rotation.z = yawObject.rotation.y;
     };
     

@@ -3,7 +3,7 @@ define([
 ], function(three, Ship, Asteroid, Sun, PointerLockControls, ControlManager) {
   function Galaxy() {
     var WIDTH = window.innerWidth,
-    HEIGHT = window.innerHeight;
+      HEIGHT = window.innerHeight;
 
     // set some camera attributes
     var FOV = 90,
