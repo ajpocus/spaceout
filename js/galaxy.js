@@ -44,13 +44,16 @@ define([
 		  render();
 		});
     scene.add( controls.getObject() );
+    scene.controls = controls;
     
     var time = Date.now();
     var render = function () {
 		  requestAnimationFrame(render);
 
       controls.update(Date.now() - time);
-
+      ship.update();
+      sun.updateGravity(gravObjects);
+      
 		  renderer.render(scene, camera);
 		  time = Date.now();
 	  };

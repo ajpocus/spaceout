@@ -45,5 +45,13 @@ define(['three'], function (three) {
         this.mesh = ship;
     }
     
+    Ship.prototype.update = function () {
+      var controls = this.scene.controls,
+        pitchObject = controls.pitchObject,
+        yawObject = controls.yawObject;
+      
+      // this.mesh.rotation.z = yawObject.rotation.y;
+    };
+    
     return Ship;
 });

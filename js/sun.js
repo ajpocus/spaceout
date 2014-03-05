@@ -1,7 +1,7 @@
 define(['three'], function (three) {
   function Sun(scene) {
     this.scene = scene;
-    this.mass = 1.9891e12;  // measured in kgs
+    this.mass = 1.9891e9;  // measured in kgs
     this.G = 6.67e-11;
     
     this.geometry = new THREE.SphereGeometry(60, 32, 32);
@@ -20,8 +20,8 @@ define(['three'], function (three) {
     
     for (var i = 0; i < objects.length; i++) {
       var object = objects[i];
-      if (!object.hasOwnProperty('mass')) {
-        continue;
+      if (!object.mass) {
+        object.mass = 1000;
       }
       
       var mesh = sun.mesh;

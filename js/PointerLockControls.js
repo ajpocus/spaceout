@@ -4,20 +4,19 @@
 
 define(['three'], function (three) {
   THREE.PointerLockControls = function ( camera ) {
-
 	  var scope = this;
 
 	  camera.rotation.set( 0, 0, 0 );
 
-	  var pitchObject = new THREE.Object3D();
-	  pitchObject.add( camera );
+	  scope.pitchObject = new THREE.Object3D();
+	  scope.pitchObject.add( camera );
 
-	  var yawObject = new THREE.Object3D();
-	  yawObject.position.y = 10;
-	  yawObject.add( pitchObject );
+	  scope.yawObject = new THREE.Object3D();
+	  scope.yawObject.position.y = 10;
+	  scope.yawObject.add( scope.pitchObject );
 
     // set initial position at (0, 0, 200)
-    yawObject.translateZ(200);
+    scope.yawObject.translateZ(200);
     
 	  var moveForward = false;
 	  var moveBackward = false;
@@ -38,17 +37,15 @@ define(['three'], function (three) {
 		  var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		  var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-		  yawObject.rotation.y -= movementX * 0.002;
-		  pitchObject.rotation.x -= movementY * 0.002;
+		  scope.yawObject.rotation.y -= movementX * 0.002;
+		  scope.pitchObject.rotation.x -= movementY * 0.002;
 
-		  pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
+		  scope.pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, scope.pitchObject.rotation.x ) );
 
 	  };
 
 	  var onKeyDown = function ( event ) {
-
 		  switch ( event.keyCode ) {
-
 			  case 38: // up
 			  case 87: // w
 				  moveForward = true;
@@ -72,9 +69,7 @@ define(['three'], function (three) {
 				  if ( canJump === true ) velocity.y += 10;
 				  canJump = false;
 				  break;
-
 		  }
-
 	  };
 
 	  var onKeyUp = function ( event ) {
@@ -113,7 +108,7 @@ define(['three'], function (three) {
 
 	  this.getObject = function () {
 
-		  return yawObject;
+		  return scope.yawObject;
 
 	  };
 
@@ -133,7 +128,7 @@ define(['three'], function (three) {
 
 		  return function( v ) {
 
-			  rotation.set( pitchObject.rotation.x, yawObject.rotation.y, 0 );
+			  rotation.set( scope.pitchObject.rotation.x, scope.yawObject.rotation.y, 0 );
 
 			  v.copy( direction ).applyEuler( rotation );
 
@@ -166,14 +161,14 @@ define(['three'], function (three) {
 
 		  }
 
-		  yawObject.translateX( velocity.x );
-		  yawObject.translateY( velocity.y ); 
-		  yawObject.translateZ( velocity.z );
+		  scope.yawObject.translateX( velocity.x );
+		  scope.yawObject.translateY( velocity.y ); 
+		  scope.yawObject.translateZ( velocity.z );
 
-		  if ( yawObject.position.y < 10 ) {
+		  if ( scope.yawObject.position.y < 10 ) {
 
 			  velocity.y = 0;
-			  yawObject.position.y = 10;
+			  scope.yawObject.position.y = 10;
 
 			  canJump = true;
 
