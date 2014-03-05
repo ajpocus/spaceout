@@ -1,6 +1,6 @@
 define([
-  'three', 'ship', 'asteroid', 'sun', 'PointerLockControls', 'control_manager'
-], function(three, Ship, Asteroid, Sun, PointerLockControls, ControlManager) {
+  'three', 'ship', 'asteroid', 'sun', 'PointerLockControls', 'control_manager', 'radar'
+], function(three, Ship, Asteroid, Sun, PointerLockControls, ControlManager, Radar) {
   function Galaxy() {
     var WIDTH = window.innerWidth,
       HEIGHT = window.innerHeight;
@@ -101,6 +101,8 @@ define([
 
 		}
 
+    var radar = new Radar(scene);
+    
     
     var time = Date.now();
     var render = function () {
@@ -109,6 +111,7 @@ define([
       controls.update(Date.now() - time);
       ship.update();
       sun.updateGravity(controls, ship);
+      radar.update(ship);
       
 		  renderer.render(scene, camera);
 		  time = Date.now();
