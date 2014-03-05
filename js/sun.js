@@ -40,8 +40,6 @@ define(['three'], function (three) {
     var objectVector = new THREE.Vector3(pos.x, pos.y, pos.z);
     var lookVector = new THREE.Vector3().addVectors(sunVector, objectVector).normalize();
     
-    console.log(lookVector);
-  
     object.yawObject.translateOnAxis(lookVector, ship.velocity);
   };
   
