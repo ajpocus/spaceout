@@ -16,7 +16,7 @@ define(['three'], function (three) {
 	  scope.yawObject.add( scope.pitchObject );
 
     // set initial position at (0, 0, 200)
-    scope.yawObject.translateZ(200);
+    scope.yawObject.translateZ(5000);
     
 	  var moveForward = false;
 	  var moveBackward = false;

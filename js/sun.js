@@ -2,9 +2,10 @@ define(['three'], function (three) {
   function Sun(scene) {
     this.scene = scene;
     this.mass = 1.9891e9;  // measured in kgs
+    this.radius = 200;
     this.G = 6.67e-11;
     
-    this.geometry = new THREE.SphereGeometry(60, 32, 32);
+    this.geometry = new THREE.SphereGeometry(this.radius, 128, 128);
     this.material = new THREE.MeshBasicMaterial({ color: 0xcccc00 });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     
