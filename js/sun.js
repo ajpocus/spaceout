@@ -15,32 +15,34 @@ define(['three'], function (three) {
     this.scene.add(this.mesh);
   }
   
-  Sun.prototype.updateGravity = function updateGravity(objects) {
+  Sun.prototype.updateGravity = function updateGravity(object, ship) {
     var sun = this;
     
-    for (var i = 0; i < objects.length; i++) {
-      var object = objects[i];
-      if (!object.mass) {
-        object.mass = 1000;
-      }
-      
-      var mesh = sun.mesh;
-      var mesh2 = object.mesh;
-      var x2 = Math.pow((mesh.position.x - mesh2.position.x), 2);
-      var y2 = Math.pow((mesh.position.y - mesh2.position.y), 2);
-      var z2 = Math.pow((mesh.position.z - mesh2.position.z), 2);
-      var dist2 = Math.sqrt(x2 + y2 + z2);
-      var force = (sun.G * sun.mass * object.mass) / dist2;
-      
-      var acceleration = force / object.mass;
-      
-      if (object.velocity < 400) {    
-        object.velocity += acceleration;
-      }
-      
-      object.mesh.lookAt(sun.mesh.position);
-      object.mesh.translateZ(object.velocity);
+    ship.mass = 5000;
+    if (!ship.velocity) { ship.velocity = 0; }
+
+    var mesh = sun.mesh;
+    var mesh2 = ship.mesh;
+    var x2 = Math.pow((mesh.position.x - mesh2.position.x), 2);
+    var y2 = Math.pow((mesh.position.y - mesh2.position.y), 2);
+    var z2 = Math.pow((mesh.position.z - mesh2.position.z), 2);
+    var dist2 = Math.sqrt(x2 + y2 + z2);
+    var force = (sun.G * sun.mass * ship.mass) / dist2;
+    
+    var acceleration = force / ship.mass;
+    
+    if (ship.velocity < 400) {    
+      ship.velocity += acceleration;
     }
+    
+    var sunVector = new THREE.Vector3(0, 0, 0);
+    var pos = ship.mesh.position;
+    var objectVector = new THREE.Vector3(pos.x, pos.y, pos.z);
+    var lookVector = new THREE.Vector3().addVectors(sunVector, objectVector).normalize();
+    
+    console.log(lookVector);
+  
+    object.yawObject.translateOnAxis(lookVector, ship.velocity);
   };
   
   return Sun;

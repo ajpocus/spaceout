@@ -46,13 +46,15 @@ define([
     scene.add( controls.getObject() );
     scene.controls = controls;
     
+    console.log(controls.yawObject);
+    
     var time = Date.now();
     var render = function () {
 		  requestAnimationFrame(render);
 
       controls.update(Date.now() - time);
       ship.update();
-      sun.updateGravity(gravObjects);
+      sun.updateGravity(controls, ship);
       
 		  renderer.render(scene, camera);
 		  time = Date.now();
