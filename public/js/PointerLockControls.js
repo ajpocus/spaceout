@@ -182,7 +182,7 @@ define(['three'], function (three) {
         var pos = scope.yawObject.position;
         var vec = new THREE.Vector3(0, 0, -1);
 
-        bullet.position.set(pos.x, pos.y, pos.z -20);
+        bullet.position.set(pos.x, pos.y, pos.z -50);
         bullet.rotation.set(scope.pitchObject.rotation.x, scope.yawObject.rotation.y, 0);
         
         galaxy.scene.add(bullet);
@@ -196,7 +196,7 @@ define(['three'], function (three) {
 
       for (var i = 0; i < bullets.length; i++) {
         var bullet = bullets[i];
-        bullet.translateZ(-10.0);
+        bullet.translateZ(-10.0 - velocity.z);
           
         if (bullet.position.z < -1000) {
           galaxy.scene.remove(bullet);
