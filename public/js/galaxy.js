@@ -68,7 +68,7 @@ define([
 		  requestAnimationFrame(render);
       controls.update(Date.now() - time);
       ship.update();
-      //sun.updateGravity(controls, ship);
+      sun.updateGravity(controls, ship);
       
       socket.emit('move', {
         sid: sid,
