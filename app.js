@@ -41,7 +41,7 @@ server.listen(app.get('port'), function(){
 
 io.sockets.on('connection', function (socket) {
   socket.on('move', function (data) {
-    io.sockets.emit('update', { data: data });
+    io.sockets.emit('moved', data);
   });
 });
 

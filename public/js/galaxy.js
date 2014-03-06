@@ -1,10 +1,14 @@
 define([
-  'three', 'ship', 'asteroid', 'sun', 'PointerLockControls', 'control_manager'
-], function(three, Ship, Asteroid, Sun, PointerLockControls, ControlManager) {
+  'three', 'ship', 'asteroid', 'sun', 'PointerLockControls', 'control_manager', 'star_field', 'socketio'
+], function(three, Ship, Asteroid, Sun, PointerLockControls, ControlManager, StarField, io) {
   function Galaxy() {
     var WIDTH = window.innerWidth,
       HEIGHT = window.innerHeight;
-
+    var sid = Math.floor(Math.random() * 0x10000).toString();
+    var socket = io.connect('http://localhost');
+    var galaxy = this;
+    galaxy.ships = {};
+    
     // set some camera attributes
     var FOV = 90,
         ASPECT = WIDTH / HEIGHT,
@@ -21,10 +25,11 @@ define([
     document.body.appendChild( renderer.domElement );
     
     var ship = new Ship(scene);
-
-    // Asteroid.generateField(scene);
     var sun = new Sun(scene);
-    var gravObjects = [ ship ];
+    var starField = new StarField(scene);
+        
+    camera.add(ship.mesh);
+    ship.mesh.position.set(0, -10, -12);
     
     var ambientLight = new THREE.AmbientLight( 0x404040 );
     scene.add(ambientLight);
@@ -32,10 +37,7 @@ define([
     var pointLight = new THREE.PointLight( 0xffffff, 1, 10000 );
     pointLight.position = sun.mesh.position;
     scene.add(pointLight);
-    
-    camera.add(ship.mesh);
-    ship.mesh.position.set(0, -10, -12);
-    
+
     var blocker = document.getElementById( 'blocker' );
 		var instructions = document.getElementById( 'instructions' );
 
@@ -47,68 +49,35 @@ define([
     scene.add( controls.getObject() );
     scene.controls = controls;
     
-    var i, r = 100, starsGeometry = [ new THREE.Geometry(), new THREE.Geometry() ];
+    socket.on('moved', function (data) {
+      if (data.sid === sid) { return; }
 
-		for ( i = 0; i < 250; i ++ ) {
-
-			var vertex = new THREE.Vector3();
-			vertex.x = Math.random() * 2 - 1;
-			vertex.y = Math.random() * 2 - 1;
-			vertex.z = Math.random() * 2 - 1;
-			vertex.multiplyScalar( r );
-
-			starsGeometry[ 0 ].vertices.push( vertex );
-
-		}
-
-		for ( i = 0; i < 1500; i ++ ) {
-
-			var vertex = new THREE.Vector3();
-			vertex.x = Math.random() * 2 - 1;
-			vertex.y = Math.random() * 2 - 1;
-			vertex.z = Math.random() * 2 - 1;
-			vertex.multiplyScalar( r );
-
-			starsGeometry[ 1 ].vertices.push( vertex );
-
-		}
-
-		var stars;
-		var starsMaterials = [
-			new THREE.ParticleSystemMaterial( { color: 0x555555, size: 2, sizeAttenuation: false } ),
-			new THREE.ParticleSystemMaterial( { color: 0x555555, size: 1, sizeAttenuation: false } ),
-			new THREE.ParticleSystemMaterial( { color: 0x333333, size: 2, sizeAttenuation: false } ),
-			new THREE.ParticleSystemMaterial( { color: 0x3a3a3a, size: 1, sizeAttenuation: false } ),
-			new THREE.ParticleSystemMaterial( { color: 0x1a1a1a, size: 2, sizeAttenuation: false } ),
-			new THREE.ParticleSystemMaterial( { color: 0x1a1a1a, size: 1, sizeAttenuation: false } )
-		];
-
-		for ( i = 10; i < 30; i ++ ) {
-
-			stars = new THREE.ParticleSystem( starsGeometry[ i % 2 ], starsMaterials[ i % 6 ] );
-
-			stars.rotation.x = Math.random() * 6;
-			stars.rotation.y = Math.random() * 6;
-			stars.rotation.z = Math.random() * 6;
-
-			s = i * 10;
-			stars.scale.set( s, s, s );
-
-			stars.matrixAutoUpdate = false;
-			stars.updateMatrix();
-
-			scene.add( stars );
-
-		}
-
+      var ship = galaxy.ships[data.id];
+      if (!ship) {
+        ship = new Ship(scene);
+        galaxy.ships[data.id] = ship;
+      }
+      
+      ship.mesh.position.x = data.ship.x;
+      ship.mesh.position.y = data.ship.y;
+      ship.mesh.position.z = data.ship.z;
+    });
     
     var time = Date.now();
     var render = function () {
 		  requestAnimationFrame(render);
-
       controls.update(Date.now() - time);
       ship.update();
-      sun.updateGravity(controls, ship);
+      //sun.updateGravity(controls, ship);
+      
+      socket.emit('move', {
+        sid: sid,
+        ship: {
+          x: controls.yawObject.position.x,
+          y: controls.yawObject.position.y,
+          z: controls.yawObject.position.z
+        }
+      });        
       
 		  renderer.render(scene, camera);
 		  time = Date.now();
