@@ -175,35 +175,35 @@ define(['three'], function (three) {
 		  }
 		  
 		  if (isShooting) {
-		    var shipVector = galaxy.ship.mesh.position;
-        var forwardVector = new THREE.Vector3(0, 0, -1);
+        var geom = new THREE.CubeGeometry(2, 2, 20);
+        var mat = new THREE.MeshLambertMaterial({ color: 0xff0000, ambient: 0xff0000 });
         
-        var shootVector = new THREE.Vector3().addVectors(shipVector, forwardVector);
-        var geom = new THREE.CubeGeometry(5, 5, 5);
-        var mat = new THREE.MeshBasicMaterial({ color: 0xcc0000 });
         var bullet = new THREE.Mesh(geom, mat);
-        bullet.position.set(shipVector.x, shipVector.y, shipVector.z);
+        var pos = scope.yawObject.position;
+        var vec = new THREE.Vector3(0, 0, -1);
+
+        bullet.position.set(pos.x, pos.y, pos.z -20);
+        bullet.rotation.set(scope.pitchObject.rotation.x, scope.yawObject.rotation.y, 0);
         
         galaxy.scene.add(bullet);
         bullets[bullets.length] = bullet;
-      
-        
-        console.log(bullets);
-        for (var i = 0; i < bullets.length; i++) {
-          var bullet = bullets[i];
-          bullet.translateOnAxis(shootVector, 0.5);
-          
-          if (bullet.position.z < -1000) {
-            galaxy.scene.remove(bullet);
-            bullets.splice(i, 1);
-          }
-        }
+        isShooting = false;
 		  }
 
 		  scope.yawObject.translateX( velocity.x );
 		  scope.yawObject.translateY( velocity.y ); 
 		  scope.yawObject.translateZ( velocity.z );
 
+      for (var i = 0; i < bullets.length; i++) {
+        var bullet = bullets[i];
+        bullet.translateZ(-10.0);
+          
+        if (bullet.position.z < -1000) {
+          galaxy.scene.remove(bullet);
+          bullets.splice(i, 1);
+        }
+      }
+      
 		  if ( scope.yawObject.position.y < 10 ) {
 
 			  velocity.y = 0;
