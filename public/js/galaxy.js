@@ -5,7 +5,7 @@ define([
     var WIDTH = window.innerWidth,
       HEIGHT = window.innerHeight;
     var sid = Math.floor(Math.random() * 0x10000).toString();
-    var socket = io.connect('http://localhost');
+    var socket = io.connect();
     var galaxy = this;
     galaxy.ships = {};
     
