@@ -3,7 +3,7 @@
  */
 
 define(['three'], function (three) {
-  THREE.PointerLockControls = function ( camera ) {
+  THREE.PointerLockControls = function ( galaxy, camera ) {
 	  var scope = this;
 
 	  camera.rotation.set( 0, 0, 0 );
@@ -22,13 +22,25 @@ define(['three'], function (three) {
 	  var moveBackward = false;
 	  var moveLeft = false;
 	  var moveRight = false;
-
+    
+    var isShooting = true;
+    var bullets = [];
 	  var isOnObject = false;
 	  var canJump = false;
 
 	  var velocity = new THREE.Vector3();
 
 	  var PI_2 = Math.PI / 2;
+
+    var onMouseDown = function (event) {
+      if ( scope.enabled === false ) return;
+      
+      isShooting = true;
+    };
+    
+    var onMouseUp = function (event) {
+      isShooting = false;
+    };
 
 	  var onMouseMove = function ( event ) {
 
@@ -100,9 +112,10 @@ define(['three'], function (three) {
 
 	  };
 
-	  document.addEventListener( 'mousemove', onMouseMove, false );
-	  document.addEventListener( 'keydown', onKeyDown, false );
-	  document.addEventListener( 'keyup', onKeyUp, false );
+    document.addEventListener('mousedown', onMouseDown, false);
+	  document.addEventListener('mousemove', onMouseMove, false);
+	  document.addEventListener('keydown', onKeyDown, false);
+	  document.addEventListener('keyup', onKeyUp, false);
 
 	  this.enabled = false;
 
@@ -159,6 +172,32 @@ define(['three'], function (three) {
 
 			  velocity.y = Math.max( 0, velocity.y );
 
+		  }
+		  
+		  if (isShooting) {
+		    var shipVector = galaxy.ship.mesh.position;
+        var forwardVector = new THREE.Vector3(0, 0, -1);
+        
+        var shootVector = new THREE.Vector3().addVectors(shipVector, forwardVector);
+        var geom = new THREE.CubeGeometry(5, 5, 5);
+        var mat = new THREE.MeshBasicMaterial({ color: 0xcc0000 });
+        var bullet = new THREE.Mesh(geom, mat);
+        bullet.position.set(shipVector.x, shipVector.y, shipVector.z);
+        
+        galaxy.scene.add(bullet);
+        bullets[bullets.length] = bullet;
+      
+        
+        console.log(bullets);
+        for (var i = 0; i < bullets.length; i++) {
+          var bullet = bullets[i];
+          bullet.translateOnAxis(shootVector, 0.5);
+          
+          if (bullet.position.z < -1000) {
+            galaxy.scene.remove(bullet);
+            bullets.splice(i, 1);
+          }
+        }
 		  }
 
 		  scope.yawObject.translateX( velocity.x );
