@@ -16,6 +16,7 @@ define([
         FAR = 10000;
         
     var scene = new THREE.Scene();
+    galaxy.scene = scene;
     var camera = new THREE.PerspectiveCamera( FOV, ASPECT, NEAR, FAR );
     scene.camera = camera;
     
@@ -26,6 +27,7 @@ define([
     document.body.appendChild( renderer.domElement );
     
     var ship = new Ship(scene);
+    galaxy.ship = ship;
     var sun = new Sun(scene);
     var starField = new StarField(scene);
     
@@ -39,7 +41,7 @@ define([
     var blocker = document.getElementById( 'blocker' );
 		var instructions = document.getElementById( 'instructions' );
 
-    var controls = new PointerLockControls(camera);
+    var controls = new PointerLockControls(galaxy, camera);
 		ControlManager.setupControls(controls, function () {
 		  render();
 		});
@@ -53,6 +55,7 @@ define([
       var ship = galaxy.ships[data.id];
       if (!ship) {
         ship = new Ship(scene);
+        ship.npc = true;
         galaxy.ships[data.id] = ship;
       }
       
