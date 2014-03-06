@@ -141,7 +141,7 @@ define(['three'], function (three) {
 
 		  return function( v ) {
 
-			  rotation.set( scope.pitchObject.rotation.x, scope.yawObject.rotation.y, 0 );
+			  rotation.set( scope.pitchObject.rotation.x, scope.yawObject.rotation.y, scope.yawObject.position.z);
 
 			  v.copy( direction ).applyEuler( rotation );
 
@@ -174,15 +174,17 @@ define(['three'], function (three) {
 
 		  }
 		  
-		  if (isShooting) {
+		  scope.yawObject.translateX( velocity.x );
+		  scope.yawObject.translateY( velocity.y ); 
+		  scope.yawObject.translateZ( velocity.z );
+
+      if (isShooting) {
         var geom = new THREE.CubeGeometry(2, 2, 20);
         var mat = new THREE.MeshLambertMaterial({ color: 0xff0000, ambient: 0xff0000 });
-        
         var bullet = new THREE.Mesh(geom, mat);
+        
         var pos = scope.yawObject.position;
-        var vec = new THREE.Vector3(0, 0, -1);
-
-        bullet.position.set(pos.x, pos.y, pos.z -50);
+        bullet.position.set(pos.x, pos.y, pos.z);
         bullet.rotation.set(scope.pitchObject.rotation.x, scope.yawObject.rotation.y, 0);
         
         galaxy.scene.add(bullet);
@@ -190,18 +192,12 @@ define(['three'], function (three) {
         isShooting = false;
 		  }
 
-		  scope.yawObject.translateX( velocity.x );
-		  scope.yawObject.translateY( velocity.y ); 
-		  scope.yawObject.translateZ( velocity.z );
-
       for (var i = 0; i < bullets.length; i++) {
         var bullet = bullets[i];
-        bullet.translateZ(-10.0 - velocity.z);
+        var v = velocity.z;
+        if (v < 0) { v *= -1; }
+        bullet.translateZ(-10.0 - v);
           
-        if (bullet.position.z < -1000) {
-          galaxy.scene.remove(bullet);
-          bullets.splice(i, 1);
-        }
       }
       
 		  if ( scope.yawObject.position.y < 10 ) {
