@@ -17,6 +17,7 @@ define([
         
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera( FOV, ASPECT, NEAR, FAR );
+    scene.camera = camera;
     
     var clock = new THREE.Clock();
     
@@ -27,9 +28,6 @@ define([
     var ship = new Ship(scene);
     var sun = new Sun(scene);
     var starField = new StarField(scene);
-        
-    camera.add(ship.mesh);
-    ship.mesh.position.set(0, -10, -12);
     
     var ambientLight = new THREE.AmbientLight( 0x404040 );
     scene.add(ambientLight);
