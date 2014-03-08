@@ -1,6 +1,6 @@
 define([
-  'three', 'ship', 'asteroid', 'sun', 'PointerLockControls', 'control_manager', 'star_field', 'socketio'
-], function(three, Ship, Asteroid, Sun, PointerLockControls, ControlManager, StarField, io) {
+  'three', 'ship', 'asteroid', 'sun', 'PointerLockControls', 'ShipControls', 'control_manager', 'star_field', 'socketio'
+], function(three, Ship, Asteroid, Sun, PointerLockControls, ShipControls, ControlManager, StarField, io) {
   function Galaxy() {
     var WIDTH = window.innerWidth,
       HEIGHT = window.innerHeight;
@@ -41,7 +41,7 @@ define([
     var blocker = document.getElementById( 'blocker' );
 		var instructions = document.getElementById( 'instructions' );
 
-    var controls = new PointerLockControls(galaxy, camera);
+    var controls = new ShipControls(galaxy, camera);
 		ControlManager.setupControls(controls, function () {
 		  render();
 		});
