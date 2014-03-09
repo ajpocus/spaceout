@@ -31,7 +31,8 @@ define(['three'], function (three) {
 	  var canJump = false;
 
 	  var velocity = new THREE.Vector3();
-
+    scope.velocity = velocity;
+    
 	  var PI_2 = Math.PI / 2;
     var PI_4 = Math.PI / 4;
     
@@ -174,8 +175,8 @@ define(['three'], function (three) {
 		  if ( moveLeft ) velocity.x -= 0.12 * delta;
 		  if ( moveRight ) velocity.x += 0.12 * delta;
 
-		  scope.yawObject.rotation.y -= scope.xRad;
-		  scope.pitchObject.rotation.x -= scope.yRad;
+		  scope.yawObject.rotation.y -= scope.xRad * 4;
+		  scope.pitchObject.rotation.x -= scope.yRad * 4;
 
 		  scope.pitchObject.rotation.x = Math.max(-PI_2, Math.min(PI_2, scope.pitchObject.rotation.x));
 		  
@@ -200,8 +201,6 @@ define(['three'], function (three) {
         isShooting = false;
 		  }
 		  
-		  console.log(velocity);
-
       for (var i = 0; i < bullets.length; i++) {
         var bullet = bullets[i];
         var v = velocity.z;
