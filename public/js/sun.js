@@ -1,7 +1,7 @@
 define(['three'], function (three) {
   function Sun(scene) {
     this.scene = scene;
-    this.mass = 1.9891e15;  // measured in kgs
+    this.mass = 1.9891e9;  // measured in kgs
     this.radius = 2000;
     this.G = 6.67e-11;
     
@@ -31,7 +31,7 @@ define(['three'], function (three) {
     var objectVector = new THREE.Vector3(pos.x, pos.y, pos.z);
     var lookVector = new THREE.Vector3().addVectors(sunVector, objectVector).normalize();
     
-    //object.yawObject.translateOnAxis(lookVector, ship.velocity);
+    object.yawObject.translateOnAxis(lookVector, ship.velocity);
     
     var earthForce = sun.getForce(earth);
     var acceleration = earthForce / earth.mass;
