@@ -21,7 +21,7 @@ define(['three'], function (three) {
     scope.yDiff = 0;
     
     // set initial position, away from the sun
-    scope.yawObject.translateZ(50000);
+    scope.yawObject.translateZ(5000);
     
 	  var moveForward = false;
 	  var moveBackward = false;
