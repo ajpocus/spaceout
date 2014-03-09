@@ -16,6 +16,8 @@ define(['three'], function (three) {
 
     scope.xRad = 0;
     scope.yRad = 0;
+    scope.xDiff = 0;
+    scope.yDiff = 0;
     
     // set initial position, away from the sun
     scope.yawObject.translateZ(5000);
@@ -59,7 +61,9 @@ define(['three'], function (three) {
 
       scope.xRad = PI_2 * movementX;
       scope.yRad = PI_2 * movementY;
-		  
+		  scope.xDiff = scope.xRad / 60;
+      scope.yDiff = scope.yRad / 60;
+    
 		  var ship = galaxy.ship.mesh;
 		  ship.rotation.z = Math.max( - PI_2, Math.min( PI_2, ship.rotation.z - scope.xRad));
 	  };
@@ -160,7 +164,6 @@ define(['three'], function (three) {
 	  }();
 
 	  this.update = function ( delta ) {
-
 		  if ( scope.enabled === false ) return;
 
 		  delta *= 0.1;
@@ -178,6 +181,30 @@ define(['three'], function (three) {
 		  scope.yawObject.rotation.y -= scope.xRad * 4;
 		  scope.pitchObject.rotation.x -= scope.yRad * 4;
 
+      if (Math.abs(scope.xDiff) > Math.abs(scope.xRad)) {
+        scope.xRad = 0;
+      } else {
+        scope.xRad -= scope.xDiff;
+      }
+      
+      if (Math.abs(scope.yDiff) > Math.abs(scope.yRad)) {
+        scope.yRad = 0;
+      } else {
+        scope.yRad -= scope.yDiff;
+      }
+      
+      var ship = galaxy.ship.mesh;
+      if (ship.rotation.z !== 0) {
+        var diff = 0.01;
+        if (ship.rotation.z < 0) { diff *= -1 }
+        if (Math.abs(ship.rotation.z) < Math.abs(diff)) {
+          diff = ship.rotation.z;
+        }
+        
+        ship.rotation.z = Math.max( -PI_2, Math.min( PI_2, ship.rotation.z - diff));
+        console.log(ship.rotation.z, scope.xRad);
+      }
+            
 		  scope.pitchObject.rotation.x = Math.max(-PI_2, Math.min(PI_2, scope.pitchObject.rotation.x));
 		  
 		  var rotFactor = scope.pitchObject.rotation.x / PI_2;
@@ -188,29 +215,35 @@ define(['three'], function (three) {
 		  scope.yawObject.translateZ( velocity.z );
 
       if (isShooting) {
-        var geom = new THREE.CubeGeometry(2, 2, 20);
-        var mat = new THREE.MeshLambertMaterial({ color: 0xff0000, ambient: 0xff0000 });
-        var bullet = new THREE.Mesh(geom, mat);
-        
-        var pos = scope.yawObject.position;
-        bullet.position.set(pos.x, pos.y, pos.z);
-        bullet.rotation.set(scope.pitchObject.rotation.x, scope.yawObject.rotation.y, 0);
-        
-        galaxy.scene.add(bullet);
-        bullets[bullets.length] = bullet;
-        isShooting = false;
+        scope.fireBullet();
 		  }
 		  
-      for (var i = 0; i < bullets.length; i++) {
+      scope.updateBullets();
+
+	  };
+	  
+	  this.fireBullet = function () {
+	    var geom = new THREE.CubeGeometry(2, 2, 20);
+      var mat = new THREE.MeshLambertMaterial({ color: 0xff0000, ambient: 0xff0000 });
+      var bullet = new THREE.Mesh(geom, mat);
+      
+      var pos = scope.yawObject.position;
+      bullet.position.set(pos.x, pos.y, pos.z);
+      bullet.rotation.set(scope.pitchObject.rotation.x, scope.yawObject.rotation.y, 0);
+      
+      galaxy.scene.add(bullet);
+      bullets[bullets.length] = bullet;
+      isShooting = false;
+	  };
+	  
+	  this.updateBullets = function () {
+	    for (var i = 0; i < bullets.length; i++) {
         var bullet = bullets[i];
         var v = velocity.z;
         if (v < 0) { v *= -1; }
         bullet.translateZ(-10.0 - v);
-          
       }
-
 	  };
-	  
   };
   
   return ShipControls;
