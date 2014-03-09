@@ -1,5 +1,5 @@
 define([
-  'three', 'ship', 'asteroid', 'sun', 'ShipControls', 'control_manager', 'star_field', 'earth', 'socketio', 'jquery'
+  'three', 'ship', 'asteroid', 'sun', 'ShipControls', 'pointer_manager', 'star_field', 'earth', 'socketio', 'jquery.min'
 ], function(three, Ship, Asteroid, Sun, ShipControls, ControlManager, StarField, Earth, io, $) {
   function Galaxy() {
     var WIDTH = window.innerWidth,

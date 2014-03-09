@@ -9,7 +9,7 @@ define(['three'], function (three) {
     this.material = new THREE.MeshBasicMaterial({ color: 0x00cc00 });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     
-    this.mesh.translateZ(1.5e5);
+    this.mesh.translateZ(1.5e8);
     var pointLight = new THREE.PointLight( 0xffffff, 1, 100 );
     pointLight.position = this.mesh.position;
     this.scene.add(pointLight);
@@ -26,10 +26,10 @@ define(['three'], function (three) {
       earth.lookVector = new THREE.Vector3(0, 0, -1);
     }
     
-    var tangentVector = new THREE.Vector3(1, 0, 0);
-    var xVector = earth.lookVector.add(tangentVector).normalize();
-    console.log(xVector);
-    this.mesh.translateOnAxis(xVector, 1000);
+    var lookVector = earth.lookVector;
+    var upVector = new THREE.Vector3(0, 1, 0);
+    var tangentVector = lookVector.cross(upVector);
+    this.mesh.translateOnAxis(tangentVector, 1000);
   };
   
   return Earth;

@@ -177,7 +177,7 @@ define(['three'], function (three) {
       velocity.y = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, velocity.y));
       velocity.z = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, velocity.z));
       
-		  if ( moveForward ) velocity.z -= 0.12 * delta;
+		  if ( moveForward ) velocity.z -= 12.0 * delta;
 		  if ( moveBackward ) velocity.z += 0.12 * delta;
 
 		  if ( moveLeft ) velocity.x -= 0.12 * delta;

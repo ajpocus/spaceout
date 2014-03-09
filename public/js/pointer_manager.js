@@ -1,6 +1,6 @@
 define(function () {
-  ControlManager = {};
-  ControlManager.setupControls = function (controls, cb) {
+  PointerManager = {};
+  PointerManager.setupControls = function (controls, cb) {
     var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
     
     if ( havePointerLock ) {
@@ -79,5 +79,5 @@ define(function () {
     }
   };
   
-  return ControlManager;
+  return PointerManager;
 });
