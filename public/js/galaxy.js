@@ -13,7 +13,7 @@ define([
     var FOV = 90,
         ASPECT = WIDTH / HEIGHT,
         NEAR = 0.1,
-        FAR = 10000;
+        FAR = 100000;
         
     var scene = new THREE.Scene();
     galaxy.scene = scene;

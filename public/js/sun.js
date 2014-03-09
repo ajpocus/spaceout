@@ -1,8 +1,8 @@
 define(['three'], function (three) {
   function Sun(scene) {
     this.scene = scene;
-    this.mass = 1.9891e9;  // measured in kgs
-    this.radius = 200;
+    this.mass = 1.9891e15;  // measured in kgs
+    this.radius = 2000;
     this.G = 6.67e-11;
     
     this.geometry = new THREE.SphereGeometry(this.radius, 128, 128);

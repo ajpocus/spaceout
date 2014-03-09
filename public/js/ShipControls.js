@@ -5,7 +5,8 @@
 define(['three'], function (three) {
   ShipControls = function ( galaxy, camera ) {
 	  var scope = this;
-
+    var TERMINAL_V = 1.0;
+    
 	  camera.rotation.set( 0, 0, 0 );
 
 	  scope.pitchObject = new THREE.Object3D();
@@ -20,7 +21,7 @@ define(['three'], function (three) {
     scope.yDiff = 0;
     
     // set initial position, away from the sun
-    scope.yawObject.translateZ(5000);
+    scope.yawObject.translateZ(50000);
     
 	  var moveForward = false;
 	  var moveBackward = false;
@@ -172,6 +173,10 @@ define(['three'], function (three) {
 		  velocity.y += ( - velocity.y ) * 0.08 * delta;
       velocity.z += ( - velocity.z ) * 0.08 * delta;
       
+      velocity.x = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, velocity.x));
+      velocity.y = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, velocity.y));
+      velocity.z = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, velocity.z));
+      
 		  if ( moveForward ) velocity.z -= 0.12 * delta;
 		  if ( moveBackward ) velocity.z += 0.12 * delta;
 
@@ -202,7 +207,6 @@ define(['three'], function (three) {
         }
         
         ship.rotation.z = Math.max( -PI_2, Math.min( PI_2, ship.rotation.z - diff));
-        console.log(ship.rotation.z, scope.xRad);
       }
             
 		  scope.pitchObject.rotation.x = Math.max(-PI_2, Math.min(PI_2, scope.pitchObject.rotation.x));
