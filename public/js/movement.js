@@ -7,14 +7,18 @@ define(['three'], function (three) {
     this.acceleration = new THREE.Vector3();
     
     this.updateMovement = function () {
+      this.body.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
+      
       this.velocity.x += this.acceleration.x;
-      this.mesh.translateX(this.velocity.x);
+      this.body.translateX(this.velocity.x);
       
       this.velocity.y += this.acceleration.y;
-      this.mesh.translateY(this.velocity.y);
+      this.body.translateY(this.velocity.y);
       
       this.velocity.z += this.acceleration.z;
-      this.mesh.translateZ(this.velocity.z);
+      this.body.translateZ(this.velocity.z);
+      
+      this.position = this.body.position;
     };
     
     return this;

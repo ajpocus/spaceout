@@ -3,7 +3,7 @@ define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement)
     this.galaxy = galaxy;
     this.scene = this.galaxy.scene;
     this.controls = this.scene.controls;
-    this.position = this.controls.yawObject.position;
+    this.position = this.controls.position;
     
     this.mass = 5e4;  // kgs
     this.rays = [
@@ -26,6 +26,7 @@ define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement)
 		loader.load('spaceship.obj', function (object) {
 			ship.scene.add(object);
 			ship.mesh = object;
+			ship.body = ship.mesh;
 			
 			ship.scene.camera.add(object);
       object.position.set(0, -2, -12);
@@ -36,9 +37,7 @@ define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement)
   
   Ship.prototype.update = function () {
     var ship = this,
-        controls = this.scene.controls,
-        pitchObject = controls.pitchObject,
-        yawObject = controls.yawObject;
+        controls = this.scene.controls;
     
     // gradually degrade the velocity of the ship
     if (this.velocity > 0) {
@@ -60,7 +59,7 @@ define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement)
   
   Ship.prototype.detectCollisions = function detectCollisions() {
     var ship = this;
-    var shipPos = ship.galaxy.controls.yawObject.position;
+    var shipPos = ship.galaxy.controls.position;
     var collidableMeshList = [
       ship.galaxy.sun.mesh,
       ship.galaxy.earth.mesh
@@ -86,7 +85,7 @@ define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement)
           blending: THREE.AdditiveBlending
         });
         
-    var pos = ship.galaxy.controls.yawObject.position;
+    var pos = ship.galaxy.controls.position;
     for (var i = 0; i < particleCount; i++) {
       var pX = pos.x,
           pY = pos.y,

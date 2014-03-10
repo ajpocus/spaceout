@@ -2,26 +2,21 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-define(['three'], function (three) {
+define(['three', 'movement'], function (three, Movement) {
   ShipControls = function ( galaxy, camera ) {
 	  var scope = this;
     var TERMINAL_V = 1.0;
     
 	  camera.rotation.set( 0, 0, 0 );
-
-	  scope.pitchObject = new THREE.Object3D();
-	  scope.pitchObject.add( camera );
-
-	  scope.yawObject = new THREE.Object3D();
-	  scope.yawObject.add( scope.pitchObject );
-
+    scope.body = camera;
+    
     scope.xRad = 0;
     scope.yRad = 0;
     scope.xDiff = 0;
     scope.yDiff = 0;
     
     // set initial position, away from the sun
-    scope.yawObject.translateZ(5000);
+    scope.body.translateZ(5000);
     
 	  var moveForward = false;
 	  var moveBackward = false;
@@ -33,9 +28,6 @@ define(['three'], function (three) {
 	  var isOnObject = false;
 	  var canJump = false;
 
-	  var velocity = new THREE.Vector3();
-    scope.velocity = velocity;
-    
 	  var PI_2 = Math.PI / 2;
     var PI_4 = Math.PI / 4;
     
@@ -65,7 +57,7 @@ define(['three'], function (three) {
 		  scope.xDiff = scope.xRad / 60;
       scope.yDiff = scope.yRad / 60;
     
-		  var ship = galaxy.ship.mesh;
+		  var ship = galaxy.ship;
 		  ship.rotation.z = Math.max( - PI_2, Math.min( PI_2, ship.rotation.z - scope.xRad));
 	  };
 
@@ -91,7 +83,7 @@ define(['three'], function (three) {
 				  break;
 
 			  case 32: // space
-				  if ( canJump === true ) velocity.y += 10;
+				  if ( canJump === true ) scope.velocity.y += 10;
 				  canJump = false;
 				  break;
 		  }
@@ -134,7 +126,7 @@ define(['three'], function (three) {
 
 	  this.getObject = function () {
 
-		  return scope.yawObject;
+		  return scope.body;
 
 	  };
 
@@ -154,7 +146,7 @@ define(['three'], function (three) {
 
 		  return function( v ) {
 
-			  rotation.set( scope.pitchObject.rotation.x, scope.yawObject.rotation.y, scope.yawObject.position.z);
+			  rotation.set( scope.body.rotation.x, scope.body.rotation.y, scope.body.position.z);
 
 			  v.copy( direction ).applyEuler( rotation );
 
@@ -169,22 +161,22 @@ define(['three'], function (three) {
 
 		  delta *= 0.1;
 
-		  velocity.x += ( - velocity.x ) * 0.08 * delta;
-		  velocity.y += ( - velocity.y ) * 0.08 * delta;
-      velocity.z += ( - velocity.z ) * 0.08 * delta;
+		  scope.velocity.x += ( - scope.velocity.x ) * 0.08 * delta;
+		  scope.velocity.y += ( - scope.velocity.y ) * 0.08 * delta;
+      scope.velocity.z += ( - scope.velocity.z ) * 0.08 * delta;
       
-      velocity.x = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, velocity.x));
-      velocity.y = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, velocity.y));
-      velocity.z = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, velocity.z));
+      scope.velocity.x = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, scope.velocity.x));
+      scope.velocity.y = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, scope.velocity.y));
+      scope.velocity.z = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, scope.velocity.z));
       
-		  if ( moveForward ) velocity.z -= 12.0 * delta;
-		  if ( moveBackward ) velocity.z += 0.12 * delta;
+		  if ( moveForward ) scope.velocity.z -= 12.0 * delta;
+		  if ( moveBackward ) scope.velocity.z += 0.12 * delta;
 
-		  if ( moveLeft ) velocity.x -= 0.12 * delta;
-		  if ( moveRight ) velocity.x += 0.12 * delta;
+		  if ( moveLeft ) scope.velocity.x -= 0.12 * delta;
+		  if ( moveRight ) scope.velocity.x += 0.12 * delta;
 
-		  scope.yawObject.rotation.y -= scope.xRad * 4;
-		  scope.pitchObject.rotation.x -= scope.yRad * 4;
+		  scope.rotation.y -= scope.xRad * 4;
+		  scope.rotation.x -= scope.yRad * 4;
 
       if (Math.abs(scope.xDiff) > Math.abs(scope.xRad)) {
         scope.xRad = 0;
@@ -209,21 +201,17 @@ define(['three'], function (three) {
         ship.rotation.z = Math.max( -PI_2, Math.min( PI_2, ship.rotation.z - diff));
       }
             
-		  scope.pitchObject.rotation.x = Math.max(-PI_2, Math.min(PI_2, scope.pitchObject.rotation.x));
+		  scope.rotation.x = Math.max(-PI_2, Math.min(PI_2, scope.rotation.x));
 		  
-		  var rotFactor = scope.pitchObject.rotation.x / PI_2;
-		  velocity.y += rotFactor * 0.12 * delta;
+		  var rotFactor = scope.rotation.x / PI_2;
+		  scope.velocity.y += rotFactor * 0.12 * delta;
 		  
-		  scope.yawObject.translateX( velocity.x );
-		  scope.yawObject.translateY( velocity.y ); 
-		  scope.yawObject.translateZ( velocity.z );
-
       if (isShooting) {
         scope.fireBullet();
 		  }
 		  
       scope.updateBullets();
-
+      scope.updateMovement();
 	  };
 	  
 	  this.fireBullet = function () {
@@ -231,9 +219,9 @@ define(['three'], function (three) {
       var mat = new THREE.MeshLambertMaterial({ color: 0xff0000, ambient: 0xff0000 });
       var bullet = new THREE.Mesh(geom, mat);
       
-      var pos = scope.yawObject.position;
+      var pos = scope.position;
       bullet.position.set(pos.x, pos.y, pos.z);
-      bullet.rotation.set(scope.pitchObject.rotation.x, scope.yawObject.rotation.y, 0);
+      bullet.rotation.set(scope.rotation.x, scope.rotation.y, 0);
       
       galaxy.scene.add(bullet);
       bullets[bullets.length] = bullet;
@@ -243,12 +231,14 @@ define(['three'], function (three) {
 	  this.updateBullets = function () {
 	    for (var i = 0; i < bullets.length; i++) {
         var bullet = bullets[i];
-        var v = velocity.z;
+        var v = scope.velocity.z;
         if (v < 0) { v *= -1; }
         bullet.translateZ(-10.0 - v);
       }
 	  };
   };
+  
+  Movement.call(ShipControls.prototype);
   
   return ShipControls;
 });

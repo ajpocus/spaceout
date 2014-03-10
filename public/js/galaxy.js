@@ -81,9 +81,9 @@ define([
       socket.emit('move', {
         sid: sid,
         ship: {
-          x: controls.yawObject.position.x,
-          y: controls.yawObject.position.y,
-          z: controls.yawObject.position.z
+          x: controls.position.x,
+          y: controls.position.y,
+          z: controls.position.z
         }
       });        
       
