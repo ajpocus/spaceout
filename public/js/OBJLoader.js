@@ -321,7 +321,8 @@ define(['three'], function (three) {
 			  geometry.computeBoundingSphere();
 
 		  }
-		
+		  
+		  object.geometry = geometry;
 		  return object;
 
 	  }

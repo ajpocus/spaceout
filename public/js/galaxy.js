@@ -26,12 +26,14 @@ define([
     renderer.setSize( WIDTH, HEIGHT );
     document.body.appendChild( renderer.domElement );
     
-    var ship = new Ship(scene);
+    var ship = new Ship(galaxy);
     galaxy.ship = ship;
     var sun = new Sun(scene);
+    galaxy.sun = sun;
     var starField = new StarField(scene);
     
     var earth = new Earth(scene);
+    galaxy.earth = earth;
     
     var ambientLight = new THREE.AmbientLight( 0x404040 );
     scene.add(ambientLight);
@@ -50,6 +52,7 @@ define([
 		
     scene.add( controls.getObject() );
     scene.controls = controls;
+    galaxy.controls = controls;
     
     socket.on('moved', function (data) {
       if (data.sid === sid) { return; }
