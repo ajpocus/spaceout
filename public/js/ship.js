@@ -1,9 +1,11 @@
-define(['three', 'OBJLoader'], function (three, OBJLoader) {
+define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement) {
   function Ship(galaxy) {
     this.galaxy = galaxy;
     this.scene = this.galaxy.scene;
+    this.controls = this.scene.controls;
+    this.position = this.controls.yawObject.position;
+    
     this.mass = 5e4;  // kgs
-    this.velocity = 0;
     this.rays = [
       new THREE.Vector3(0, 0, 1),
       new THREE.Vector3(1, 0, 1),
@@ -30,6 +32,8 @@ define(['three', 'OBJLoader'], function (three, OBJLoader) {
 		});
   }
   
+  Movement.call(Ship.prototype);
+  
   Ship.prototype.update = function () {
     var ship = this,
         controls = this.scene.controls,
@@ -40,6 +44,8 @@ define(['three', 'OBJLoader'], function (three, OBJLoader) {
     if (this.velocity > 0) {
       this.velocity -= 0.005;
     }
+    
+    this.updateMovement();
     
     this.detectCollisions();
     

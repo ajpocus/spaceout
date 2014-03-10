@@ -26,14 +26,24 @@ define([
     renderer.setSize( WIDTH, HEIGHT );
     document.body.appendChild( renderer.domElement );
     
+    var controls = new ShipControls(galaxy, camera);
+		ControlManager.setupControls(controls, function () {
+		  render();
+		});
+		
+    scene.add( controls.getObject() );
+    scene.controls = controls;
+    galaxy.controls = controls;
+    
     var ship = new Ship(galaxy);
     galaxy.ship = ship;
-    var sun = new Sun(scene);
-    galaxy.sun = sun;
-    var starField = new StarField(scene);
     
     var earth = new Earth(scene);
     galaxy.earth = earth;
+    
+    var sun = new Sun(galaxy);
+    galaxy.sun = sun;
+    var starField = new StarField(scene);
     
     var ambientLight = new THREE.AmbientLight( 0x404040 );
     scene.add(ambientLight);
@@ -45,15 +55,6 @@ define([
     var blocker = document.getElementById( 'blocker' );
 		var instructions = document.getElementById( 'instructions' );
 
-    var controls = new ShipControls(galaxy, camera);
-		ControlManager.setupControls(controls, function () {
-		  render();
-		});
-		
-    scene.add( controls.getObject() );
-    scene.controls = controls;
-    galaxy.controls = controls;
-    
     socket.on('moved', function (data) {
       if (data.sid === sid) { return; }
 
@@ -75,7 +76,7 @@ define([
       controls.update(Date.now() - time);
       ship.update();
       earth.update();
-      sun.updateGravity(controls, ship, earth);
+      sun.update();
       
       socket.emit('move', {
         sid: sid,
