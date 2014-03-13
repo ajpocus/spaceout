@@ -1,6 +1,6 @@
 define([
-  'three', 'ship', 'asteroid', 'sun', 'ShipControls', 'pointer_manager', 'star_field', 'earth', 'socketio', 'jquery.min'
-], function(three, Ship, Asteroid, Sun, ShipControls, ControlManager, StarField, Earth, io, $) {
+  'three', 'ship', 'asteroid', 'sun', 'ShipControls', 'pointer_manager', 'star_field', 'earth', 'enemy', 'socketio', 'jquery.min'
+], function(three, Ship, Asteroid, Sun, ShipControls, ControlManager, StarField, Earth, Enemy, io, $) {
   function Galaxy() {
     var WIDTH = window.innerWidth,
       HEIGHT = window.innerHeight;
@@ -45,6 +45,9 @@ define([
     galaxy.sun = sun;
     var starField = new StarField(scene);
     
+    var enemy = new Enemy(galaxy);
+    galaxy.enemy = enemy;
+    
     var ambientLight = new THREE.AmbientLight( 0x404040 );
     scene.add(ambientLight);
     
@@ -77,6 +80,7 @@ define([
       ship.update();
       earth.update();
       sun.update();
+      enemy.update();
       
       socket.emit('move', {
         sid: sid,
