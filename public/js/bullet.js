@@ -18,9 +18,7 @@ define(['three', 'collision', 'movement'], function (three, Collision, Movement)
   }
   
   function setupPlugins() {
-    
     Movement.call(Bullet.prototype);
-    console.log(Bullet.collidables);
     Collision.call(Bullet.prototype, { collidables: Bullet.collidables });
   }
   
@@ -30,6 +28,11 @@ define(['three', 'collision', 'movement'], function (three, Collision, Movement)
     this.body.translateZ(-10.0 - v);
     
     this.detectCollisions();
+    if (this.explosion) {
+      var explosion = this.explosion;
+      var scale = explosion.scale.x + 0.1;
+      explosion.scale.set(scale, scale, scale);
+    }
   };
   
   return Bullet;
