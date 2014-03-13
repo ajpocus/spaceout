@@ -18,6 +18,17 @@ define(['three', 'movement', 'ship'], function (three, Movement, Ship) {
   Movement.call(Enemy.prototype);
   
   Enemy.prototype.update = function () {
+    var enemy = this;
+    var player = enemy.galaxy.controls.body;
+    var playerPos = player.position;
+    
+    enemy.body.lookAt(playerPos);
+    var zDiff = Math.abs(enemy.position.z - playerPos.z);
+    
+    if (zDiff > 100) {
+      enemy.body.translateZ(10);
+    }
+    
     this.updateMovement();
   };
   

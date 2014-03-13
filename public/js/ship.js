@@ -70,7 +70,6 @@ define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement)
       ship.caster.set(shipPos, ship.rays[i]);
       var collisions = ship.caster.intersectObjects(collidableMeshList);
       if (collisions.length > 0 && collisions[0].distance <= 32) {
-        console.log("HIT");
         ship.explode();
       }
     }
