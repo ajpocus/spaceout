@@ -7,6 +7,7 @@ define(['three', 'movement', 'ship'], function (three, Movement, Ship) {
     var manager = new THREE.LoadingManager();
     var loader = new THREE.OBJLoader( manager );
 		loader.load('spaceship.obj', function (object) {
+		  object.scale.set(3, 3, 3);
 			enemy.scene.add(object);
 			enemy.mesh = object;
 			enemy.body = enemy.mesh;

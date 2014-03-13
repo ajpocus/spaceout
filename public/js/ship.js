@@ -24,12 +24,13 @@ define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement)
     var manager = new THREE.LoadingManager();
     var loader = new THREE.OBJLoader( manager );
 		loader.load('spaceship.obj', function (object) {
+		  object.scale.set(3, 3, 3);
 			ship.scene.add(object);
 			ship.mesh = object;
 			ship.body = ship.mesh;
 			
 			ship.scene.camera.add(object);
-      object.position.set(0, -2, -12);
+      object.position.set(0, -2, -20);
 		});
   }
   
