@@ -13,7 +13,7 @@ define(['three', 'collision', 'movement'], function (three, Collision, Movement)
     var pos = source.position;
     mesh.position.set(pos.x, pos.y, pos.z);
     mesh.rotation.set(source.rotation.x, source.rotation.y, source.rotation.z);
-    Bullet.collidables = [ galaxy.controls.body, galaxy.enemy.mesh, galaxy.sun.mesh ];
+    Bullet.collidables = galaxy.enemy.body.children;
     setupPlugins();
   }
   

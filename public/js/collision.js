@@ -22,8 +22,7 @@ define(['three'], function (three) {
         object.caster.set(pos, object.rays[i]);
         var collisions = object.caster.intersectObjects(collidables);
         
-        if (collisions.length > 0 && collisions[0].distance <= 50) {
-          console.log("HEYO");
+        if (collisions.length > 0 && collisions[0].distance <= 10) {
           object.explode();
         }
       }
@@ -36,11 +35,12 @@ define(['three'], function (three) {
           particles = new THREE.SphereGeometry(10, 10, 10),
           particleMat = new THREE.ParticleBasicMaterial({
             color: 0xff0000,
-            size: 1,
+            size: 3,
             blending: THREE.AdditiveBlending
           });
           
-      var pos = object.position;
+      var pos = object.body.position;
+      console.log(pos);
       for (var i = 0; i < particleCount; i++) {
         var pX = pos.x,
             pY = pos.y,
