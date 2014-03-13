@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-define(['three', 'movement'], function (three, Movement) {
+define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
   ShipControls = function ( galaxy, camera ) {
 	  var scope = this;
     var TERMINAL_V = 1.0;
@@ -215,15 +215,8 @@ define(['three', 'movement'], function (three, Movement) {
 	  };
 	  
 	  this.fireBullet = function () {
-	    var geom = new THREE.CubeGeometry(2, 2, 20);
-      var mat = new THREE.MeshLambertMaterial({ color: 0xff0000, ambient: 0xff0000 });
-      var bullet = new THREE.Mesh(geom, mat);
+	    var bullet = new Bullet(galaxy, scope);
       
-      var pos = scope.position;
-      bullet.position.set(pos.x, pos.y, pos.z);
-      bullet.rotation.set(scope.rotation.x, scope.rotation.y, 0);
-      
-      galaxy.scene.add(bullet);
       bullets[bullets.length] = bullet;
       isShooting = false;
 	  };
@@ -231,9 +224,7 @@ define(['three', 'movement'], function (three, Movement) {
 	  this.updateBullets = function () {
 	    for (var i = 0; i < bullets.length; i++) {
         var bullet = bullets[i];
-        var v = scope.velocity.z;
-        if (v < 0) { v *= -1; }
-        bullet.translateZ(-10.0 - v);
+        bullet.update();
       }
 	  };
   };

@@ -38,15 +38,15 @@ define([
     var ship = new Ship(galaxy);
     galaxy.ship = ship;
     
+    var enemy = new Enemy(galaxy);
+    galaxy.enemy = enemy;
+    
     var earth = new Earth(scene);
     galaxy.earth = earth;
     
     var sun = new Sun(galaxy);
     galaxy.sun = sun;
     var starField = new StarField(scene);
-    
-    var enemy = new Enemy(galaxy);
-    galaxy.enemy = enemy;
     
     var ambientLight = new THREE.AmbientLight( 0x404040 );
     scene.add(ambientLight);
