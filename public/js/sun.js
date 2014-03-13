@@ -17,9 +17,8 @@ define(['three', 'gravity'], function (three, Gravity) {
     this.scene.add(this.mesh);
     
     // mixins
-    var ship = galaxy.controls.yawObject,
-        earth = galaxy.earth.mesh;
-    Sun.satellites = [ ship, earth ];
+    var ship = galaxy.controls.yawObject;
+    Sun.satellites = [ ship ];
   }
   
   

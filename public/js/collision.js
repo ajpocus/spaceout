@@ -36,11 +36,11 @@ define(['three'], function (three) {
           particles = new THREE.SphereGeometry(10, 10, 10),
           particleMat = new THREE.ParticleBasicMaterial({
             color: 0xff0000,
-            size: 5,
+            size: 1,
             blending: THREE.AdditiveBlending
           });
           
-      var pos = object.galaxy.controls.position;
+      var pos = object.position;
       for (var i = 0; i < particleCount; i++) {
         var pX = pos.x,
             pY = pos.y,

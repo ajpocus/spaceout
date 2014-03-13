@@ -62,8 +62,7 @@ define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement)
     var ship = this;
     var shipPos = ship.galaxy.controls.position;
     var collidableMeshList = [
-      ship.galaxy.sun.mesh,
-      ship.galaxy.earth.mesh
+      ship.galaxy.sun.mesh
     ];
     
     for (var i = 0; i < ship.rays.length; i++) {    

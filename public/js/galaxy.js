@@ -75,7 +75,6 @@ define([
 		  requestAnimationFrame(render);
       controls.update(Date.now() - time);
       ship.update();
-      earth.update();
       sun.update();
       enemy.update();
       
