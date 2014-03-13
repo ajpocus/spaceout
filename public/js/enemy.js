@@ -9,8 +9,8 @@ define(['three', 'movement', 'ship'], function (three, Movement, Ship) {
 		loader.load('spaceship.obj', function (object) {
 		  object.scale.set(3, 3, 3);
 			enemy.scene.add(object);
+			enemy.body = object;
 			enemy.mesh = object;
-			enemy.body = enemy.mesh;
 			enemy.body.translateZ(4000);
 		});
   }

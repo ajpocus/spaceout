@@ -8,12 +8,12 @@ define(['three', 'collision', 'movement'], function (three, Collision, Movement)
     var mat = new THREE.MeshLambertMaterial({ color: 0xff0000, ambient: 0xff0000 });
     var mesh = new THREE.Mesh(geom, mat);
     bullet.body = mesh;
-    galaxy.scene.add(mesh);
+    galaxy.scene.add(bullet.body);
     
     var pos = source.position;
     mesh.position.set(pos.x, pos.y, pos.z);
     mesh.rotation.set(source.rotation.x, source.rotation.y, source.rotation.z);
-    Bullet.collidables = [ galaxy.controls.body, galaxy.enemy.body ];
+    Bullet.collidables = [ galaxy.controls.body, galaxy.enemy.mesh, galaxy.sun.mesh ];
     setupPlugins();
   }
   

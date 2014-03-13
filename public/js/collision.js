@@ -17,12 +17,12 @@ define(['three'], function (three) {
       var object = this;
       var pos = object.body.position;
       var collidables = opts.collidables || [];
-
+      
       for (var i = 0; i < object.rays.length; i++) {    
         object.caster.set(pos, object.rays[i]);
         var collisions = object.caster.intersectObjects(collidables);
         
-        if (collisions.length > 0 && collisions[0].distance <= 100) {
+        if (collisions.length > 0 && collisions[0].distance <= 50) {
           console.log("HEYO");
           object.explode();
         }
@@ -47,11 +47,17 @@ define(['three'], function (three) {
             pZ = pos.z,
             particle = new THREE.Vector3(pX, pY, pZ);
         
-        var minV = -100,
-            maxV = 100,
-            xV = Math.random() * (minV - maxV) + minV,
-            yV = Math.random() * (minV - maxV) + minV,
-            zV = Math.random() * (minV - maxV) + minV;
+        var range = 100,
+            minX = pX - range,
+            maxX = pX + range,
+            minY = pY - range,
+            maxY = pY + range,
+            minZ = pZ - range,
+            maxZ = pZ + range,
+            
+            xV = Math.random() * (minX - maxX) + minX,
+            yV = Math.random() * (minY - maxY) + minY,
+            zV = Math.random() * (minZ - maxZ) + minZ;
         particle.velocity = new THREE.Vector3(xV, yV, zV);
         particles.vertices.push(particle);
       }
@@ -61,7 +67,7 @@ define(['three'], function (three) {
       object.particles = particles;
       object.particleCount = particleCount;
       
-      object.scene.add(particleSystem);
+      object.galaxy.scene.add(particleSystem);
     };
   }
   
