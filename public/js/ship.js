@@ -30,7 +30,8 @@ define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement)
 			ship.body = ship.mesh;
 			
 			ship.scene.camera.add(object);
-      object.position.set(0, -2, -20);
+      object.position.set(0, -10, -40);
+      
 		});
   }
   
