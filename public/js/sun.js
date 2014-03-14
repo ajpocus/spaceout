@@ -28,13 +28,19 @@ define(['three', 'gravity'], function (three, Gravity) {
     this.updateGravity();
   };
   
+  Sun.dist2 = function (pos1, pos2) {
+    var x2 = Math.pow((pos1.x - pos2.x), 2);
+    var y2 = Math.pow((pos1.y - pos2.y), 2);
+    var z2 = Math.pow((pos1.z - pos2.z), 2);
+    var dist2 = Math.sqrt(x2 + y2 + z2);
+    return dist2;
+  };
+  
   Sun.prototype.getForce = function getForce(object) {
     var mesh = this.mesh;
     var mesh2 = object.mesh;
-    var x2 = Math.pow((mesh.position.x - mesh2.position.x), 2);
-    var y2 = Math.pow((mesh.position.y - mesh2.position.y), 2);
-    var z2 = Math.pow((mesh.position.z - mesh2.position.z), 2);
-    var dist2 = Math.sqrt(x2 + y2 + z2);
+    
+    var dist2 = Sun.dist2(mesh.position, mesh2, position);
     var force = (this.G * this.mass * object.mass) / dist2;
     return force;
   };

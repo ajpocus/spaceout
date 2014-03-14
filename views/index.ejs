@@ -55,6 +55,14 @@
 			  z-index: 100;
 			}
 			
+			#radar .center {
+			  position: absolute;
+			  right: 50px;
+			  top: 50px;
+			  width: 2px;
+			  height: 2px;
+			}
+			
 			#radar .inner {
 			  position: absolute;
 			  width: 100%;
@@ -63,19 +71,19 @@
 			}
 			
 			#radar .ship {
-			  background: green;
+			  position: relative;
+			  background: red;
 			  width: 2px;
 			  height: 2px;
+			  right: 0px;
+			  top: 0px;
 			}
 			
 			#radar .sun {
-			  background: yellow;
-			  position: absolute;
+			  background: green;
+			  position: relative;
 			  width: 2px;
 			  height: 2px;
-			  right: 50px;
-			  top: 50px;
-			  z-index: 100;
 			}
 			
 			#debug {
@@ -95,8 +103,10 @@
 
 		<div id="radar">
       <div class="inner">
-        <div class="sun"></div>
-        <div class="ship"></div>
+        <div class="center">
+          <div class="sun"></div>
+          <div class="ship"></div>
+        </div>
       </div>
     </div>
     

@@ -1,18 +1,25 @@
-define(['three'], function (three) {
-  function Radar(scene) {
-    this.scene = scene;
+define(['three', 'sun'], function (three, Sun) {
+  function Radar(galaxy) {
+    this.galaxy = galaxy;
   }
   
-  Radar.prototype.update = function (ship) {
-    var origin = new THREE.Vector3(0, 0, 0);
-    var pos = ship.mesh.position;
-    var objectVector = new THREE.Vector3(pos.x, pos.y, pos.z);
-    var lookVector = new THREE.Vector3().addVectors(origin, objectVector).normalize().multiplyScalar(400);
+  Radar.prototype.update = function (enemy) {
+    var origin = this.galaxy.controls.body.position;
+    var pos = enemy.body.position;
+    
+    var dx = Math.min(200, Math.max(-200, Math.round(pos.x - origin.x)));
+    var dy = Math.min(200, Math.max(-200, Math.round(pos.z - origin.z)));
+    var dist2 = Sun.dist2(pos, origin);
+    dist2 = Math.min(200, dist2) / 200;
+    
+    console.log(dist2);
+    dx = dx;
+    dy = dy;
     
     ship = document.querySelector("#radar .ship");
-    console.log(lookVector);
-    ship.style.right = 200 - lookVector.x;
-    ship.style.top = 200 - lookVector.z;
+    console.log(dx, dy);
+    ship.style.right = dx * dist2 + "px";
+    ship.style.top = dy * dist2 + "px";
   };
   
   return Radar;
