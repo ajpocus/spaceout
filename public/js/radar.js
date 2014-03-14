@@ -12,12 +12,10 @@ define(['three', 'sun'], function (three, Sun) {
     var dist2 = Sun.dist2(pos, origin);
     dist2 = Math.min(200, dist2) / 200;
     
-    console.log(dist2);
     dx = dx;
     dy = dy;
     
     ship = document.querySelector("#radar .ship");
-    console.log(dx, dy);
     ship.style.right = dx * dist2 + "px";
     ship.style.top = dy * dist2 + "px";
   };

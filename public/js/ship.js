@@ -54,6 +54,7 @@ define(['three', 'OBJLoader', 'movement', 'collision'], function (three, OBJLoad
       this.velocity -= 0.005;
     }
     
+    this.updateRotation();
     this.updateMovement();
     
     var exploded = this.detectCollisions();

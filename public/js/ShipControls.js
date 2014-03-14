@@ -8,7 +8,16 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
     var TERMINAL_V = 10.0;
     
 	  camera.rotation.set( 0, 0, 0 );
-    scope.body = camera;
+    
+    var pitchObject = new THREE.Object3D();
+	  pitchObject.add( camera );
+    scope.pitchObject = pitchObject;
+    
+	  var yawObject = new THREE.Object3D();
+	  yawObject.position.y = 10;
+	  yawObject.add( pitchObject );
+	  scope.yawObject = yawObject;	
+    scope.body = yawObject;
     
     scope.xRad = 0;
     scope.yRad = 0;
@@ -16,7 +25,7 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
     scope.yDiff = 0;
     
     // set initial position, away from the sun
-    scope.body.translateZ(5000);
+    scope.body.translateZ(3000);
     
 	  var moveForward = false;
 	  var moveBackward = false;
@@ -131,7 +140,7 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
 
 	  this.getObject = function () {
 
-		  return scope.body;
+		  return yawObject;
 
 	  };
 
@@ -151,7 +160,7 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
 
 		  return function( v ) {
 
-			  rotation.set( scope.body.rotation.x, scope.body.rotation.y, scope.body.position.z);
+			  rotation.set( pitchObject.rotation.x, yawObject.rotation.y, 0);
 
 			  v.copy( direction ).applyEuler( rotation );
 
@@ -180,9 +189,10 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
 		  if ( moveLeft ) scope.velocity.x -= 36 * delta;
 		  if ( moveRight ) scope.velocity.x += 36 * delta;
 
-		  scope.rotation.y -= scope.xRad * 4;
-		  scope.rotation.x -= scope.yRad * 4;
-
+		  scope.body.rotation.y -= scope.xRad * 4;
+		  pitchObject.rotation.x -= scope.yRad * 4;
+      console.log(yawObject.position);
+      console.log(yawObject.rotation);
       if (Math.abs(scope.xDiff) > Math.abs(scope.xRad)) {
         scope.xRad = 0;
       } else {
@@ -206,7 +216,7 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
         ship.rotation.z = Math.max( -PI_2, Math.min( PI_2, ship.rotation.z - diff));
       }
             
-		  scope.rotation.x = Math.max(-PI_2, Math.min(PI_2, scope.rotation.x));
+		  pitchObject.rotation.x = Math.max(-PI_2, Math.min(PI_2, pitchObject.rotation.x));
 		  
 		  var rotFactor = scope.rotation.x / PI_2;
 		  scope.velocity.y += rotFactor * 0.12 * delta;
