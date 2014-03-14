@@ -47,6 +47,8 @@ define(['three', 'OBJLoader', 'movement', 'collision'], function (three, OBJLoad
     var ship = this,
         controls = this.scene.controls;
     
+    if (!controls.enabled) { return; }
+    
     // gradually degrade the velocity of the ship
     if (this.velocity > 0) {
       this.velocity -= 0.005;
@@ -56,12 +58,24 @@ define(['three', 'OBJLoader', 'movement', 'collision'], function (three, OBJLoad
     
     var exploded = this.detectCollisions();
     if (exploded) {
-      ship.velocity = 0;
       controls.enabled = false;
       setTimeout(function () {
-        ship.galaxy.newRound();
+        ship.respawn();
       }, 1000);
     }
+  };
+  
+  Ship.prototype.respawn = function () {
+    var ship = this,
+      camera = ship.scene.camera,
+      controls = ship.controls;
+    
+    ship.velocity.set(0, 0, 0);
+    controls.velocity.set(0, 0, 0);
+    controls.body.position.set(0, 0, 5000);
+    ship.position.set(0, -10, -40);
+    ship.body.position.set(0, -10, -40);
+    controls.enabled = true;
   };
   
   return Ship;

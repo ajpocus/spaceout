@@ -7,6 +7,9 @@ define(['three'], function (three) {
     this.acceleration = new THREE.Vector3();
     
     this.updateMovement = function () {
+      if (this.hasOwnProperty('enabled')) {
+        if (!this.enabled) { return; }
+      }
       this.body.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
       
       this.velocity.x += this.acceleration.x;

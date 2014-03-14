@@ -79,7 +79,7 @@ define([
       ship.update();
       sun.update();
       enemy.update();
-      
+
       socket.emit('move', {
         sid: sid,
         ship: {

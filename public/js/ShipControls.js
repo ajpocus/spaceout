@@ -38,6 +38,8 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
     };
     
     var onMouseUp = function (event) {
+      if ( scope.enabled === false ) return;
+      
       isShooting = false;
     };
 
@@ -62,6 +64,8 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
 	  };
 
 	  var onKeyDown = function ( event ) {
+	    if ( scope.enabled === false ) return;
+	    
 		  switch ( event.keyCode ) {
 			  case 38: // up
 			  case 87: // w
@@ -90,7 +94,8 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
 	  };
 
 	  var onKeyUp = function ( event ) {
-
+      if ( scope.enabled === false ) return;
+      
 		  switch( event.keyCode ) {
 
 			  case 38: // up
@@ -215,6 +220,8 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
 	  };
 	  
 	  this.fireBullet = function () {
+	    if ( scope.enabled === false ) return;
+	    
 	    var bullet = new Bullet(galaxy, scope);
       
       bullets[bullets.length] = bullet;
@@ -222,6 +229,8 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
 	  };
 	  
 	  this.updateBullets = function () {
+	    if ( scope.enabled === false ) return;
+	    
 	    for (var i = 0; i < bullets.length; i++) {
         var bullet = bullets[i];
         bullet.update();
