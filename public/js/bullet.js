@@ -36,10 +36,11 @@ define(['three', 'collision', 'movement'], function (three, Collision, Movement)
     origin.setFromMatrixPosition(this.source.matrixWorld);
     var target = new THREE.Vector3();
     target.setFromMatrixPosition(this.target.matrixWorld);
-    var vector = origin.sub(target).normalize();
+    var vector = origin.sub(target);
     
     console.log(vector);
-    this.body.translateOnAxis(vector, -10.0 - v);
+    this.body.translateOnAxis(vector.normalize(), -10.0 - v);
+    this.body.rotation.set(-vector.y, -vector.x, vector.z);
     
     this.detectCollisions();
     if (this.explosion) {
