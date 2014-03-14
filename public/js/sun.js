@@ -2,7 +2,7 @@ define(['three', 'gravity'], function (three, Gravity) {
   function Sun(galaxy) {
     this.galaxy = galaxy;
     this.scene = this.galaxy.scene;
-    this.mass = 1.9891e9;  // measured in kgs
+    this.mass = 1.9891e12;  // measured in kgs
     this.radius = 2000;
     this.G = 6.67e-11;
     

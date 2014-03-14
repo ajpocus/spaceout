@@ -17,8 +17,8 @@ define(['three'], function (three) {
     this.detectCollisions = function detectCollisions() {
       var object = this;
       var pos;
-      if (opts.objectProperty) {
-        pos = object[opts.objectProperty];
+      if (opts.position) {
+        pos = opts.position;
       } else {
         pos = object.body.position;
       }
@@ -29,10 +29,13 @@ define(['three'], function (three) {
         object.caster.set(pos, object.rays[i]);
         var collisions = object.caster.intersectObjects(collidables);
         
-        if (collisions.length > 0 && collisions[0].distance <= 10) {
+        if (collisions.length > 0 && collisions[0].distance <= 50) {
           object.explode(collisions[0].point);
+          return true;
         }
       }
+      
+      return false;
     };
     
     this.explode = function explode(position) {

@@ -5,7 +5,7 @@
 define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
   ShipControls = function ( galaxy, camera ) {
 	  var scope = this;
-    var TERMINAL_V = 1.0;
+    var TERMINAL_V = 10.0;
     
 	  camera.rotation.set( 0, 0, 0 );
     scope.body = camera;
@@ -169,11 +169,11 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
       scope.velocity.y = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, scope.velocity.y));
       scope.velocity.z = Math.max(-TERMINAL_V, Math.min(TERMINAL_V, scope.velocity.z));
       
-		  if ( moveForward ) scope.velocity.z -= 12.0 * delta;
-		  if ( moveBackward ) scope.velocity.z += 0.12 * delta;
+		  if ( moveForward ) scope.velocity.z -= 36.0 * delta;
+		  if ( moveBackward ) scope.velocity.z += 36 * delta;
 
-		  if ( moveLeft ) scope.velocity.x -= 0.12 * delta;
-		  if ( moveRight ) scope.velocity.x += 0.12 * delta;
+		  if ( moveLeft ) scope.velocity.x -= 36 * delta;
+		  if ( moveRight ) scope.velocity.x += 36 * delta;
 
 		  scope.rotation.y -= scope.xRad * 4;
 		  scope.rotation.x -= scope.yRad * 4;

@@ -31,15 +31,16 @@ define(['three', 'OBJLoader', 'movement', 'collision'], function (three, OBJLoad
 			
 			ship.scene.camera.add(object);
       object.position.set(0, -10, -40);
-      
-      Ship.collidables = [galaxy.sun.mesh];
-      setupPlugins();
 		});
+		
+		var collidables = [galaxy.sun.mesh];
+		var position = ship.controls.body.position;
+    setupPlugins(collidables, position);
   }
   
-  function setupPlugins() {
+  function setupPlugins(collidables, position) {
     Movement.call(Ship.prototype);
-    Collision.call(Ship.prototype, { collidables: Ship.collidables, objectProperty: 'position' });
+    Collision.call(Ship.prototype, { collidables: collidables, position: position });
   }
   
   Ship.prototype.update = function () {
@@ -53,8 +54,14 @@ define(['three', 'OBJLoader', 'movement', 'collision'], function (three, OBJLoad
     
     this.updateMovement();
     
-    this.detectCollisions();
-    
+    var exploded = this.detectCollisions();
+    if (exploded) {
+      ship.velocity = 0;
+      controls.enabled = false;
+      setTimeout(function () {
+        ship.galaxy.newRound();
+      }, 1000);
+    }
   };
   
   return Ship;

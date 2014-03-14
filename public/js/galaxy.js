@@ -35,14 +35,16 @@ define([
     scene.controls = controls;
     galaxy.controls = controls;
     
+    var sun = new Sun(galaxy);
+    galaxy.sun = sun;
+    
     var ship = new Ship(galaxy);
     galaxy.ship = ship;
     
     var enemy = new Enemy(galaxy);
     galaxy.enemy = enemy;
     
-    var sun = new Sun(galaxy);
-    galaxy.sun = sun;
+    
     var starField = new StarField(scene);
     
     var ambientLight = new THREE.AmbientLight( 0x404040 );
