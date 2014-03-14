@@ -16,6 +16,7 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
 	  var yawObject = new THREE.Object3D();
 	  yawObject.position.y = 10;
 	  yawObject.add( pitchObject );
+	  yawObject.velocity = new THREE.Vector3();
 	  scope.yawObject = yawObject;	
     scope.body = yawObject;
     
@@ -70,6 +71,7 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
     
 		  var ship = galaxy.ship;
 		  ship.rotation.z = Math.max( - PI_2, Math.min( PI_2, ship.rotation.z - scope.xRad));
+		  ship.rotation.x = Math.max( - PI_2, Math.min( PI_2, ship.rotation.x - scope.yRad));
 	  };
 
 	  var onKeyDown = function ( event ) {
@@ -191,8 +193,7 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
 
 		  scope.body.rotation.y -= scope.xRad * 4;
 		  pitchObject.rotation.x -= scope.yRad * 4;
-      console.log(yawObject.position);
-      console.log(yawObject.rotation);
+      
       if (Math.abs(scope.xDiff) > Math.abs(scope.xRad)) {
         scope.xRad = 0;
       } else {
@@ -215,6 +216,16 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
         
         ship.rotation.z = Math.max( -PI_2, Math.min( PI_2, ship.rotation.z - diff));
       }
+      
+      if (ship.rotation.x !== 0) {
+        var diff = 0.01;
+        if (ship.rotation.x < 0) { diff *= -1 }
+        if (Math.abs(ship.rotation.x) < Math.abs(diff)) {
+          diff = ship.rotation.x;
+        }
+        
+        ship.rotation.x = Math.max( -PI_2, Math.min( PI_2, ship.rotation.x - diff));
+      }
             
 		  pitchObject.rotation.x = Math.max(-PI_2, Math.min(PI_2, pitchObject.rotation.x));
 		  
@@ -232,8 +243,7 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
 	  this.fireBullet = function () {
 	    if ( scope.enabled === false ) return;
 	    
-	    var bullet = new Bullet(galaxy, scope);
-      
+	    var bullet = new Bullet(galaxy, galaxy.ship.mesh, galaxy.ship.cross);      
       bullets[bullets.length] = bullet;
       isShooting = false;
 	  };

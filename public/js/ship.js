@@ -31,6 +31,29 @@ define(['three', 'OBJLoader', 'movement', 'collision'], function (three, OBJLoad
 			
 			ship.scene.camera.add(object);
       object.position.set(0, -10, -40);
+      
+      // draw reticle
+      var circleGeom = new THREE.CircleGeometry(5, 64, 64);
+      var circleMat = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+      var circle = new THREE.Mesh(circleGeom, circleMat);
+      
+      var crossGeom = new THREE.Geometry();
+      crossGeom.vertices.push( new THREE.Vector3(-10, 0, 0) );
+      crossGeom.vertices.push( new THREE.Vector3(10, 0, 0) );
+      crossGeom.vertices.push( new THREE.Vector3(0, 0, 0) );
+      crossGeom.vertices.push( new THREE.Vector3(0, 10, 0) );
+      crossGeom.vertices.push( new THREE.Vector3(0, -10, 0) );
+      crossGeom.vertices.push( new THREE.Vector3(0, 0, 0) );
+      var crossMat = new THREE.LineBasicMaterial({ color: 0xff0000 });
+      var cross = new THREE.Line(crossGeom, crossMat);
+
+      circle.position.z = -200;
+      cross.position.z = -200;
+      
+      object.add(cross);
+      object.add(circle);
+      
+      ship.cross = cross;
 		});
 		
 		var collidables = [galaxy.sun.mesh];

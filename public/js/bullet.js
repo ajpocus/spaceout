@@ -1,18 +1,21 @@
 define(['three', 'collision', 'movement'], function (three, Collision, Movement) {
-  function Bullet(galaxy, source) {
+  function Bullet(galaxy, source, target) {
     var bullet = this;
     bullet.galaxy = galaxy;
     bullet.source = source;
+    bullet.target = target || galaxy.ship.cross;
     
     var geom = new THREE.CubeGeometry(2, 2, 20);
     var mat = new THREE.MeshLambertMaterial({ color: 0xff0000, ambient: 0xff0000 });
     var mesh = new THREE.Mesh(geom, mat);
     bullet.body = mesh;
+    
+    var pos = new THREE.Vector3();
+    pos.setFromMatrixPosition(source.matrixWorld);
+    bullet.body.position.set(pos.x, pos.y, pos.z);
+    
     galaxy.scene.add(bullet.body);
     
-    var pos = source.position;
-    mesh.position.set(pos.x, pos.y, pos.z);
-    mesh.rotation.set(source.rotation.x, source.rotation.y, source.rotation.z);
     Bullet.collidables = galaxy.enemy.body.children;
     setupPlugins();
   }
@@ -23,9 +26,20 @@ define(['three', 'collision', 'movement'], function (three, Collision, Movement)
   }
   
   Bullet.prototype.update = function () {
-    var v = this.source.velocity.z;
+    var v = 0;
+    if (this.source.velocity) {
+      v = this.source.velocity.z;
+    }
     if (v < 0) { v *= -1; }
-    this.body.translateZ(-10.0 - v);
+    
+    var origin = new THREE.Vector3();
+    origin.setFromMatrixPosition(this.source.matrixWorld);
+    var target = new THREE.Vector3();
+    target.setFromMatrixPosition(this.target.matrixWorld);
+    var vector = origin.sub(target).normalize();
+    
+    console.log(vector);
+    this.body.translateOnAxis(vector, -10.0 - v);
     
     this.detectCollisions();
     if (this.explosion) {

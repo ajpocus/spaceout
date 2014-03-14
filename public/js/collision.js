@@ -16,12 +16,8 @@ define(['three'], function (three) {
     
     this.detectCollisions = function detectCollisions() {
       var object = this;
-      var pos;
-      if (opts.position) {
-        pos = opts.position;
-      } else {
-        pos = object.body.position;
-      }
+      var pos = new THREE.Vector3();
+      pos.setFromMatrixPosition(object.body.matrixWorld);
       
       var collidables = opts.collidables || [];
       
