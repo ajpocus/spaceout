@@ -1,4 +1,4 @@
-define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement) {
+define(['three', 'OBJLoader', 'movement', 'collision'], function (three, OBJLoader, Movement, Collision) {
   function Ship(galaxy) {
     this.galaxy = galaxy;
     this.scene = this.galaxy.scene;
@@ -32,10 +32,15 @@ define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement)
 			ship.scene.camera.add(object);
       object.position.set(0, -10, -40);
       
+      Ship.collidables = [galaxy.sun.mesh];
+      setupPlugins();
 		});
   }
   
-  Movement.call(Ship.prototype);
+  function setupPlugins() {
+    Movement.call(Ship.prototype);
+    Collision.call(Ship.prototype, { collidables: Ship.collidables, objectProperty: 'position' });
+  }
   
   Ship.prototype.update = function () {
     var ship = this,
@@ -50,63 +55,6 @@ define(['three', 'OBJLoader', 'movement'], function (three, OBJLoader, Movement)
     
     this.detectCollisions();
     
-    if (ship.particles && ship.particles.length) {
-      for (var i = 0; i < ship.particleCount; i++) {
-        var particle = ship.particles.vertices[i];
-        particle.velocity.y -= Math.random() * 10;
-        particle.add(particle.velocity);
-      } 
-    }
-  };
-  
-  Ship.prototype.detectCollisions = function detectCollisions() {
-    var ship = this;
-    var shipPos = ship.galaxy.controls.position;
-    var collidableMeshList = [
-      ship.galaxy.sun.mesh
-    ];
-    
-    for (var i = 0; i < ship.rays.length; i++) {    
-      ship.caster.set(shipPos, ship.rays[i]);
-      var collisions = ship.caster.intersectObjects(collidableMeshList);
-      if (collisions.length > 0 && collisions[0].distance <= 32) {
-        ship.explode();
-      }
-    }
-  };
-  
-  Ship.prototype.explode = function explode() {
-    var ship = this,
-        particleCount = 100,
-        particles = new THREE.SphereGeometry(10, 10, 10),
-        particleMat = new THREE.ParticleBasicMaterial({
-          color: 0xff0000,
-          size: 5,
-          blending: THREE.AdditiveBlending
-        });
-        
-    var pos = ship.galaxy.controls.position;
-    for (var i = 0; i < particleCount; i++) {
-      var pX = pos.x,
-          pY = pos.y,
-          pZ = pos.z,
-          particle = new THREE.Vector3(pX, pY, pZ);
-      
-      var minV = -100,
-          maxV = 100,
-          xV = Math.random() * (minV - maxV) + minV,
-          yV = Math.random() * (minV - maxV) + minV,
-          zV = Math.random() * (minV - maxV) + minV;
-      particle.velocity = new THREE.Vector3(xV, yV, zV);
-      particles.vertices.push(particle);
-    }
-    
-    var particleSystem = new THREE.ParticleSystem(particles, particleMat);
-    ship.particleSystem = particleSystem;
-    ship.particles = particles;
-    ship.particleCount = particleCount;
-    
-    ship.scene.add(particleSystem);
   };
   
   return Ship;
