@@ -28,10 +28,10 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
     // set initial position, away from the sun
     scope.body.translateZ(3000);
     
-	  var moveForward = false;
-	  var moveBackward = false;
-	  var moveLeft = false;
-	  var moveRight = false;
+	  scope.moveForward = false;
+	  scope.moveBackward = false;
+	  scope.moveLeft = false;
+	  scope.moveRight = false;
     
     var isShooting = true;
     var bullets = [];
@@ -80,21 +80,21 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
 		  switch ( event.keyCode ) {
 			  case 38: // up
 			  case 87: // w
-				  moveForward = true;
+				  scope.moveForward = true;
 				  break;
 
 			  case 37: // left
 			  case 65: // a
-				  moveLeft = true; break;
+				  scope.moveLeft = true; break;
 
 			  case 40: // down
 			  case 83: // s
-				  moveBackward = true;
+				  scope.moveBackward = true;
 				  break;
 
 			  case 39: // right
 			  case 68: // d
-				  moveRight = true;
+				  scope.moveRight = true;
 				  break;
 
 			  case 32: // space
@@ -111,22 +111,22 @@ define(['three', 'movement', 'bullet'], function (three, Movement, Bullet) {
 
 			  case 38: // up
 			  case 87: // w
-				  moveForward = false;
+				  scope.moveForward = false;
 				  break;
 
 			  case 37: // left
 			  case 65: // a
-				  moveLeft = false;
+				  scope.moveLeft = false;
 				  break;
 
 			  case 40: // down
 			  case 83: // s
-				  moveBackward = false;
+				  scope.moveBackward = false;
 				  break;
 
 			  case 39: // right
 			  case 68: // d
-				  moveRight = false;
+				  scope.moveRight = false;
 				  break;
 
 		  }
