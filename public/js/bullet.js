@@ -5,8 +5,8 @@ define(['three', 'collision', 'movement'], function (three, Collision, Movement)
     bullet.source = source;
     bullet.target = target || galaxy.ship.cross;
     
-    var geom = new THREE.CubeGeometry(2, 2, 20);
-    var mat = new THREE.MeshLambertMaterial({ color: 0xff0000, ambient: 0xff0000 });
+    var geom = new THREE.IcosahedronGeometry(5);
+    var mat = new THREE.MeshLambertMaterial({ color: 0xff0000, ambient: 0xff0000, wireframe: true });
     var mesh = new THREE.Mesh(geom, mat);
     bullet.body = mesh;
     
@@ -40,7 +40,6 @@ define(['three', 'collision', 'movement'], function (three, Collision, Movement)
     
     console.log(vector);
     this.body.translateOnAxis(vector.normalize(), -10.0 - v);
-    this.body.rotation.set(-vector.y, -vector.x, vector.z);
     
     this.detectCollisions();
     if (this.explosion) {
